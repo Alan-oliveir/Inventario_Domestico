@@ -1,6 +1,8 @@
 from tkinter import*
 from tkinter import Tk, StringVar, ttk
 
+import tkinter as tk
+
 from tkcalendar import Calendar
 
 import tkinter.font as tkFont
@@ -39,8 +41,8 @@ class frame_form(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        self.rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
-        self.grid_columnconfigure((0, 1), weight=1)
+        #self.rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        #self.columnconfigure((0, 1), weight=1)
 
         # Font object:
         font_form = ctk.CTkFont(family="Segoe UI", size=13, weight="normal")
@@ -133,28 +135,157 @@ class frame_button(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        # Create 6x1 grid system
-        self.rowconfigure((0, 1, 2, 3, 4, 5), weight=0)
-        self.columnconfigure(0, weight=1)
+        # Open image:
+        self.add_img = ctk.CTkImage(Image.open(PATH + "/images/add.png"), size=(30,30))
+        self.update_img = ctk.CTkImage(Image.open(PATH + "/images/refresh.png"), size=(30,30))
+        self.clear_img = ctk.CTkImage(Image.open(PATH + "/images/folder.png"), size=(30,30))
+        self.view_img = ctk.CTkImage(Image.open(PATH + "/images/management.png"), size=(30,30))
 
-        self.button_add = ctk.CTkButton(self, width=150, text="Adicionar", command=lambda: self.create_toplevel_date("compra"))        
+        # Create 6x1 grid system
+        #self.rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        #self.columnconfigure(0, weight=1)
+        
+        # Add widgets onto the frame_button
+        self.button_add = ctk.CTkButton(self, width=175, text="Adicionar", image=self.add_img, compound="left", command=lambda: self.create_toplevel_date("compra"))        
         self.button_add.grid(row=0, column=0, padx=5, pady=5)
         
-        self.button_update = ctk.CTkButton(self, width=150, text="Atualizar", command=lambda: self.create_toplevel_date("compra"))
+        self.button_update = ctk.CTkButton(self, width=175, text="Atualizar", image=self.update_img, compound="left", command=lambda: self.create_toplevel_date("compra"))
         self.button_update.grid(row=1, column=0, padx=5, pady=5)
 
-        self.button_delete = ctk.CTkButton(self, width=150, text="Delete", command=lambda: self.create_toplevel_date("compra"))
+        self.button_delete = ctk.CTkButton(self, width=175, text="Delete",image=self.clear_img, compound="left",command=lambda: self.create_toplevel_date("compra"))
         self.button_delete.grid(row=2, column=0, padx=5, pady=5)
 
-        self.button_confirm = ctk.CTkButton(self, width=150, text="Confirmar", command=lambda: self.create_toplevel_date("compra"))
+        self.l_space1 = ctk.CTkLabel(self, width=175, text="")
+        self.l_space1.grid(row=3, column=0, padx=5, pady=5)
+
+        self.l_space2 = ctk.CTkLabel(self, width=175, height=36, text="")
+        self.l_space2.grid(row=4, column=0, padx=5, pady=5)
+
+        self.button_confirm = ctk.CTkButton(self, width=175, text="Confirmar", command=lambda: self.create_toplevel_date("compra"))
         self.button_confirm.grid(row=5, column=0, padx=5, pady=5)
 
-        self.button_view = ctk.CTkButton(self, width=150, text="Ver Item", command=lambda: self.create_toplevel_date("compra"))
+        self.button_view = ctk.CTkButton(self, width=175, text="Ver Item", image=self.view_img, compound="left", command=lambda: self.create_toplevel_date("compra"))
         self.button_view.grid(row=6, column=0, padx=5, pady=5)
 
-'''class FrameTableInfo(customtkinter.CTkFrame):
+class frame_text(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)'''
+        super().__init__(master, **kwargs)
+
+        # Font object:
+        font_label = ctk.CTkFont(family="Segoe UI", size=15, weight="bold")
+
+        # Add widgets onto the frame_text
+        l_value_total = ctk.CTkLabel(self, text="Valor total de todos os itens", font=font_label)
+        l_value_total.grid(row=0, column=0, padx=10, pady=10)
+
+        textbox_value = ctk.CTkTextbox(self, width=230, height=80, corner_radius=6)
+        textbox_value.grid(row=1, column=0, padx=10, pady=10)
+
+        l_qte_total = ctk.CTkLabel(self, text="Quatidade total de itens", font=font_label)
+        l_qte_total.grid(row=4, column=0, padx=10, pady=10)
+        
+        self.textbox_qte_itens = ctk.CTkTextbox(self, width=230, height=80, corner_radius=6)
+        self.textbox_qte_itens.grid(row=5, column=0, padx=10, pady=(12, 26))
+
+class frame_table_info(ctk.CTkScrollableFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        
+        # Add Treeview widget onto the frame
+        table = ttk.Treeview(self, columns=('#Item', 'Nome', 'Sala/Área', 'Descrição', 'Marca/Modelo', 'Data da compra', 'Valor da compra', 'Número de série'), show="headings")
+        table.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+
+        # Table headings
+        table.heading("#Item", text="Item")
+        table.heading("Nome", text="Nome")
+        table.heading("Sala/Área", text="Sala/Área")
+        table.heading("Descrição", text="Descrição")
+        table.heading("Marca/Modelo", text="Marca/Modelo")
+        table.heading("Data da compra", text="Data da compra")
+        table.heading("Valor da compra", text="Valor da compra")
+        table.heading("Número de série", text="Número de série")        
+
+        # Table columns configurations
+        table.column('#Item', width=40)
+        table.column('Nome', width=50)
+        table.column('Sala/Área', width=80)
+        table.column('Descrição', width=80)
+        table.column('Marca/Modelo', width=100)
+        table.column('Data da compra', width=100)
+        table.column('Valor da compra', width=100)
+        table.column('Número de série', width=100)
+
+        lista_itens = []
+       
+        for item in lista_itens:
+            table.insert('', 'end', values=item)
+
+        quantidade = []
+
+        for item in lista_itens:
+            quantidade.append(item[6])
+
+        Total_valor = sum(quantidade)
+        Total_itens = len(quantidade)
+
+        #frame_text.textbox_value.insert("0.0","R$ {:,.2f}".format(Total_valor))
+        #frame_text.textbox_qte_itens.insert("0.0", Total_itens)
+
+    '''def mostrar(self):
+
+        # creating a treeview with dual scrollbars
+        tabela_head = ['#Item', 'Nome', 'Sala/Área', 'Descrição', 'Marca/Modelo', 'Data da compra', 'Valor da compra', 'Número de série']
+        lista_itens = []
+
+        global tree
+
+        tree = ttk.Treeview(frame_table_info, selectmode="extended", columns=tabela_head, show="headings")
+
+        # vertical scrollbar
+        vsb = ttk.Scrollbar(frame_table_info, orient="vertical", command=tree.yview)
+
+        # horizontal scrollbar
+        hsb = ttk.Scrollbar(frame_table_info, orient="horizontal", command=tree.xview)
+
+        tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        tree.grid(column=0, row=0, sticky='nsew')
+        vsb.grid(column=1, row=0, sticky='ns')
+        hsb.grid(column=0, row=1, sticky='ew')
+        frame_table_info.grid_rowconfigure(0, weight=12)
+
+        hd=["center", "center", "center", "center", "center", "center", "center","center"]
+        h=[40,150,100,160,130,100,100, 100]
+        n=0
+
+        for col in tabela_head:
+            tree.heading(col, text=col.title(), anchor=CENTER)
+
+            # adjust the column's width to the header string
+            tree.column(col, width=h[n],anchor=hd[n])
+
+            n+=1
+
+        for item in lista_itens:
+            tree.insert('', 'end', values=item)
+
+        quantidade = []
+
+        for iten in lista_itens:
+            quantidade.append(iten[6])
+
+        Total_valor = sum(quantidade)
+        Total_itens = len(quantidade)
+
+        frame_text.textbox_value.insert("0.0","R$ {:,.2f}".format(Total_valor))
+        frame_text.textbox_qte_itens.insert("0.0", Total_itens)
+
+        #l_total['text'] = 'R$ {:,.2f}'.format(Total_valor)
+        #l_qtd['text'] = Total_itens
+
+        frame_table_info.mostrar(frame_table_info) 
+
+        frame_table_info.l_value_total = ctk.CTkLabel(frame_table_info, text="Valor total de todos os itens")
+        frame_table_info.l_value_total.grid(row=0, column=0, padx=10, pady=10)'''
 
 class App(ctk.CTk):
 
@@ -165,11 +296,12 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()        
         #self.geometry(f"{self.width}x{self.height}")
-        #self.resizable(False, False)
+        self.resizable(False, False)
         self.title("")
 
         # Create 3x3 grid system
-        self.grid_columnconfigure((0,1,2), weight=0)
+        #self.grid_rowconfigure((0, 1, 2), weight=1)
+        #self.grid_columnconfigure((0,1,2), weight=0)
 
         self.frame_title_bar = frame_title_bar(master=self)
         self.frame_title_bar.grid(row=0, column=0, columnspan=3, stick="new")
@@ -179,6 +311,12 @@ class App(ctk.CTk):
 
         self.frame_button = frame_button(master=self)
         self.frame_button.grid(row=1, column=1, pady=2, padx=1, stick="nw")
+
+        self.frame_text = frame_text(master=self)
+        self.frame_text.grid(row=1, column=2, pady=2, padx=1, stick="nw")
+
+        self.frame_table_info = frame_table_info(master=self)
+        self.frame_table_info.grid(row=2, column=0, columnspan=3, pady=2, padx=1, stick="sew")
 
 app = App()
 app.mainloop()
