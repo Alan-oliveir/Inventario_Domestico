@@ -1,14 +1,11 @@
+import os
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog as fd
 
-from tkcalendar import Calendar
-
-import customtkinter as ctk
-
 from PIL import Image
-
-import os
+from tkcalendar import Calendar
+import customtkinter as ctk
 
 from crud import * 
 
@@ -380,13 +377,11 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
        
         # List definitions for table
         table_head = ['#ID', 'Nome', 'Sala / Área', 'Descrição', 'Marca / Modelo', 'Data da Compra', 'Valor da Compra', 'Número de Série']
-        width_col = [35, 120, 120, 210, 170, 115, 115, 140] 
-
-        # Index for
-        i = 0
+        width_col = [35, 120, 120, 210, 170, 115, 115, 140]         
+        i = 0 # Index for
         
         # Add Treeview widget onto the frame
-        table = ttk.Treeview(self, columns=table_head, show="headings")
+        table = ttk.Treeview(self, columns=table_head, selectmode="browse", show="headings")
         table.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
         
         # Table headings and width column connfiguration
@@ -412,7 +407,7 @@ class FrameImage(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        # Font object:
+        # Font object
         font_img_label = ctk.CTkFont(size=14, weight="bold")
 
         FrameImage.l_image_title = ctk.CTkLabel(self, text="Foto do Item", width=300, font=font_img_label)
@@ -432,7 +427,8 @@ class App(ctk.CTk):
         # Create 3x4 grid system
         self.grid_rowconfigure((0, 1, 2), weight=1)
         self.grid_columnconfigure((0, 1, 2, 3), weight=0)  
-        
+
+        # Add frames to App        
         self.FrameTitleBar = FrameTitleBar(master=self)
         self.FrameTitleBar.grid(row=0, column=0, columnspan=4, stick="new")
 
