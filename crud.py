@@ -36,7 +36,7 @@ def ver_form():
             lista_itens.append(row)
     return lista_itens
 
-# Ver Iten no inventorio
+# Ver Item no inventorio
 def ver_item(id):
     lista_itens = []
     with con:
