@@ -356,19 +356,20 @@ class FrameText(ctk.CTkFrame):
 
         # Font object
         font_label = ctk.CTkFont(size=15, weight="bold")
-        font_text_box = ctk.CTkFont(size=20, weight="bold")
+        font_textbox_small = ctk.CTkFont(size=20, weight="bold")
+        font_textbox_large = ctk.CTkFont(size=46, weight="bold")
 
         # Add widgets onto the FrameText
         l_value_total = ctk.CTkLabel(self, text="Valor total dos itens", font=font_label)
         l_value_total.grid(row=0, column=0, padx=10, pady=10)
 
-        FrameText.textbox_value = ctk.CTkLabel(self, width=150, height=80, text="", fg_color=("#3B8ED0"), corner_radius=6, font=font_text_box)
+        FrameText.textbox_value = ctk.CTkLabel(self, width=150, height=80, text="", fg_color=("#3B8ED0"), corner_radius=6, font=font_textbox_small)
         FrameText.textbox_value.grid(row=1, column=0, padx=10, pady=10)
 
         l_qte_total = ctk.CTkLabel(self, text="Quantidade de itens", font=font_label)
         l_qte_total.grid(row=4, column=0, padx=10, pady=(25,10))
         
-        FrameText.textbox_qte_itens = ctk.CTkLabel(self, width=150, height=80, text="", fg_color=("#3B8ED0"), corner_radius=6, font=font_text_box)
+        FrameText.textbox_qte_itens = ctk.CTkLabel(self, width=150, height=80, text="", fg_color=("#3B8ED0"), corner_radius=6, font=font_textbox_large)
         FrameText.textbox_qte_itens.grid(row=5, column=0, padx=10, pady=(10, 10))
 
 class FrameTableInfo(ctk.CTkScrollableFrame):
@@ -379,7 +380,7 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
        
         # List definitions for table
         table_head = ['#ID', 'Nome', 'Sala / Área', 'Descrição', 'Marca / Modelo', 'Data da Compra', 'Valor da Compra', 'Número de Série']
-        width_col = [40, 50, 80, 80, 110, 115, 115, 115] 
+        width_col = [35, 120, 120, 210, 170, 115, 115, 140] 
 
         # Index for
         i = 0
@@ -421,15 +422,10 @@ class FrameImage(ctk.CTkFrame):
         FrameImage.l_image.grid(row = 1, column = 0, padx = 15, pady = (0,15), stick = "nsew")
 
 
-class App(ctk.CTk):
-
-    # Geometry constants:
-    width = 900
-    height = 600    
-    
+class App(ctk.CTk): 
     def __init__(self):
-        super().__init__()        
-        #self.geometry(f"{self.width}x{self.height}")
+        super().__init__()  
+              
         self.resizable(False, False)
         self.title("")
 
