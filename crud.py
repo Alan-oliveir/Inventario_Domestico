@@ -8,7 +8,7 @@ con = lite.connect('dados.db')
 def inserir_form(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Inventario (nome, local, descricao, marca, data_ompra, valor_compra, serie, imagem) VALUES (?,?,?,?,?,?,?,?)"
+        query = "INSERT INTO Inventario (nome, local, descricao, marca, data_compra, valor_compra, serie, imagem) VALUES (?,?,?,?,?,?,?,?)"
         cur.execute(query, i)
 
 # Deletar inventorio
@@ -37,7 +37,7 @@ def ver_form():
     return lista_itens
 
 # Ver Iten no inventorio
-def ver_iten(id):
+def ver_item(id):
     lista_itens = []
     with con:
         cur = con.cursor()

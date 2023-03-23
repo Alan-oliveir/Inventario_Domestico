@@ -70,7 +70,7 @@ def inserir():
     serie = e_serial.get()
     imagem = imagem_string
 
-    lista_inserir = [nome, local, descricao, model, data, valor, serie,imagem]
+    lista_inserir = [nome, local, descricao, model, data, valor, serie, imagem]
 
     for i in lista_inserir:
         if i=='':
@@ -95,8 +95,27 @@ def inserir():
 
     mostrar()
 
+# função para escolher imagem
+global imagem,imagem_string, l_imagem
+
+def escolher_imagem():
+    global imagem,imagem_string, l_imagem
+
+    #imagem = fd.askopenfilename()
+    imagem_string = fd.askopenfilename() 
+
+    # abrindo a imagem
+    imagem  = Image.open(imagem_string)
+    imagem = imagem.resize((170, 170))
+    imagem = ImageTk.PhotoImage(imagem)
+
+    l_imagem = Label(frameMeio, image=imagem,bg=co1, fg=co4 )
+    l_imagem.place(x=700, y=10)
+
 # funcao atualizar
 def atualizar():
+
+    global imagem,imagem_string, l_imagem
 
     try:
         treev_dados = tree.focus()
@@ -121,6 +140,7 @@ def atualizar():
         e_cal.insert(0, treev_lista[5])
         e_valor.insert(0, treev_lista[6])
         e_serial.insert(0, treev_lista[7])
+        imagem_string = treev_lista[8]
 
         def update():
 
@@ -133,6 +153,7 @@ def atualizar():
             data = e_cal.get()
             valor = e_valor.get()
             serie = e_serial.get()
+            imagem_string
             imagem = imagem_string
 
             if imagem == '':
@@ -203,7 +224,7 @@ def ver_imagem():
     treev_lista = treev_dicionario['values']
 
     valor = [int(treev_lista[0])]
-    iten = ver_iten(valor)
+    iten = ver_item(valor)
     imagem = iten[0][8]
 
     # abrindo a imagem
@@ -258,35 +279,39 @@ e_serial.place(x=130, y=191)
 l_carregar = Label(frameMeio, text="Imagem do item", height=1,anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
 l_carregar.place(x=10, y=222)
 
-botao_carregar = Button(frameMeio, compound=CENTER, anchor=CENTER, text="carregar".upper(), width=29, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
+botao_carregar = Button(frameMeio, command=escolher_imagem, compound=CENTER, anchor=CENTER, text="carregar".upper(), width=29, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
 botao_carregar.place(x=130, y=221)
 
 # Botao Inserir
 img_add  = Image.open('images\include.png')
 img_add = img_add.resize((20, 20))
 img_add = ImageTk.PhotoImage(img_add)
-botao_inserir = Button(frameMeio, image=img_add, compound=LEFT, anchor=NW, text="   Adicionar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
+
+botao_inserir = Button(frameMeio, command=inserir, image=img_add, compound=LEFT, anchor=NW, text="   Adicionar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
 botao_inserir.place(x=330, y=10)
 
 # Botaop Atualizar
 img_update  = Image.open('images\exchange.png')
 img_update = img_update.resize((20, 20))
 img_update = ImageTk.PhotoImage(img_update)
-botao_atualizar = Button(frameMeio, image=img_update, compound=LEFT, anchor=NW, text="   Atualizar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
+
+botao_atualizar = Button(frameMeio, command=atualizar, image=img_update, compound=LEFT, anchor=NW, text="   Atualizar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
 botao_atualizar.place(x=330, y=50)
 
 # Botao Deletar
 img_delete  = Image.open('images\delete.png')
 img_delete = img_delete.resize((20, 20))
 img_delete = ImageTk.PhotoImage(img_delete)
-botao_deletar = Button(frameMeio, image=img_delete, compound=LEFT, anchor=NW, text="   Deletar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
+
+botao_deletar = Button(frameMeio, command=deletar, image=img_delete, compound=LEFT, anchor=NW, text="   Deletar".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
 botao_deletar.place(x=330, y=90)
 
 # Botao ver Item
 img_item  = Image.open('images\inventory.png')
 img_item = img_item.resize((20, 20))
 img_item = ImageTk.PhotoImage(img_item)
-botao_ver = Button(frameMeio, image=img_item, compound=LEFT, anchor=NW, text="   Ver item".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
+
+botao_ver = Button(frameMeio, command=ver_imagem, image=img_item, compound=LEFT, anchor=NW, text="   Ver item".upper(), width=95, overrelief=RIDGE,  font=('ivy 8'),bg=co1, fg=co0 )
 botao_ver.place(x=330, y=219)
 
 # Labels Quantidade total e Valores
@@ -308,7 +333,7 @@ def mostrar():
     # creating a treeview with dual scrollbars
     tabela_head = ['#Item','Nome',  'Sala/Área','Descrição', 'Marca/Modelo', 'Data da compra','Valor da compra', 'Número de série']
 
-    lista_itens = []
+    lista_itens = ver_form()
 
     global tree
 
