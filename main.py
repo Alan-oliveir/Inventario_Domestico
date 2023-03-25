@@ -17,7 +17,8 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 def selecionar_imagem():
 
     global image_path
-
+    
+    #Todo - teste para não aceitar outra extensão a não de imagem
     image_path = fd.askopenfilename()
     image = ctk.CTkImage(Image.open(image_path), size=(275,275))
     FrameImage.l_image.configure(image=image)
@@ -25,7 +26,7 @@ def selecionar_imagem():
 # Inserir
 def inserir():
          
-    global image_path, table
+    global table, image_path
 
     nome = FrameForm.e_nome.get()
     local = FrameForm.e_local.get()
@@ -34,26 +35,36 @@ def inserir():
     data = FrameForm.e_data_compra.get()
     valor = FrameForm.e_valor.get()
     serie = FrameForm.e_serial.get()
-    imagem = image_path
 
-    lista_inserir = [nome, local, descricao, model, data, valor, serie, imagem]
+    try:
+        imagem = image_path
 
-    for i in lista_inserir:
-        if i=='':
-            messagebox.showerror('Erro', 'Preencha todos os campos')
-            return
+    except NameError:
+        messagebox.showerror('Erro', 'Preencha todos os campos e selecione uma imagem.')    
+        return
+    
+    else:    
+        lista_inserir = [nome, local, descricao, model, data, valor, serie, imagem]
 
-    inserir_form(lista_inserir)
+        for i in lista_inserir:
+            if i=='':
+                messagebox.showerror('Erro', 'Preencha todos os campos e selecione uma imagem.')
+                return
 
-    messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
+        inserir_form(lista_inserir)
+        messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
 
+    # Delete entries of FrameForm, table and image.
     FrameForm.e_nome.delete(0, 'end')
     FrameForm.e_local.delete(0, 'end')
     FrameForm.e_descricao.delete(0, 'end')
     FrameForm.e_model.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="normal")
     FrameForm.e_data_compra.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="disabled")   
     FrameForm.e_valor.delete(0, 'end')
     FrameForm.e_serial.delete(0, 'end')
+    FrameImage.l_image.configure(image=None)
 
     for item in table.get_children():
         table.delete(item)
@@ -63,7 +74,6 @@ def inserir():
         table.insert('', 'end', values=item)
 
     quantidade = []
-
     for item in lista_itens:
         quantidade.append(item[6])
 
@@ -84,22 +94,31 @@ def atualizar():
         FrameForm.e_nome.delete(0, 'end')
         FrameForm.e_local.delete(0, 'end')
         FrameForm.e_descricao.delete(0, 'end')
-        FrameForm.e_model.delete(0, 'end')
+        FrameForm.e_model.delete(0, 'end')   
+        FrameForm.e_data_compra.configure(state="normal")
         FrameForm.e_data_compra.delete(0, 'end')
+        FrameForm.e_data_compra.configure(state="disabled") 
         FrameForm.e_valor.delete(0, 'end')
         FrameForm.e_serial.delete(0, 'end')
+        FrameImage.l_image.configure(image=None)    
 
-        # Get values of item selected
+        # Get values and image of item selected
         FrameForm.e_nome.insert(0, table_view_list[1])
         FrameForm.e_local.insert(0, table_view_list[2])
         FrameForm.e_descricao.insert(0, table_view_list[3])
         FrameForm.e_model.insert(0, table_view_list[4])
+        FrameForm.e_data_compra.configure(state="normal")
         FrameForm.e_data_compra.insert(0, table_view_list[5])
+        FrameForm.e_data_compra.configure(state="disabled") 
         FrameForm.e_valor.insert(0, table_view_list[6])
-        FrameForm.e_serial.insert(0, table_view_list[7])      
+        FrameForm.e_serial.insert(0, table_view_list[7])           
+        image_path = table_view_list[8]
+        image = ctk.CTkImage(Image.open(image_path), size=(275,275))
+        FrameImage.l_image.configure(image=image)   
 
-        # Update state of button_confirm 
-        FrameButton.button_confirm.configure(state="normal")        
+        # Update state of buttons 
+        FrameButton.button_confirm.configure(state="normal")
+        FrameButton.button_delete.configure(state="normal")        
 
     except IndexError:
         messagebox.showerror('Erro', 'Selecione um dos dados na tabela')
@@ -107,8 +126,7 @@ def atualizar():
 def update():
 
     global table_view_list, table
-
-    id = int(table_view_list[0])
+    
     nome = FrameForm.e_nome.get()
     local = FrameForm.e_local.get()
     descricao = FrameForm.e_descricao.get()
@@ -117,28 +135,31 @@ def update():
     valor = FrameForm.e_valor.get()
     serie = FrameForm.e_serial.get()           
     imagem = table_view_list[8]
+    id = int(table_view_list[0])
 
-    if imagem == '':
-        imagem = FrameForm.e_serial.insert(0, table_view_list[7])
+    #if imagem == '':
+    #    imagem = FrameForm.e_serial.insert(0, table_view_list[7])
 
-    lista_atualizar = [nome, local, descricao, model, data, valor, serie, imagem, id]
-    
+    lista_atualizar = [nome, local, descricao, model, data, valor, serie, imagem, id]    
     for i in lista_atualizar:
         if i=='':
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
 
     atualizar_form(lista_atualizar)
-
     messagebox.showinfo('Sucesso', 'Os dados foram atualizados com sucesso')
 
+    # Delete entries of FrameForm, table and image.
     FrameForm.e_nome.delete(0, 'end')
     FrameForm.e_local.delete(0, 'end')
     FrameForm.e_descricao.delete(0, 'end')
     FrameForm.e_model.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="normal")
     FrameForm.e_data_compra.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="disabled")   
     FrameForm.e_valor.delete(0, 'end')
     FrameForm.e_serial.delete(0, 'end')
+    FrameImage.l_image.configure(image=None)
 
     for item in table.get_children():
         table.delete(item)
@@ -148,59 +169,65 @@ def update():
         table.insert('', 'end', values=item)
 
     quantidade = []
-
     for item in lista_itens:
         quantidade.append(item[6])
 
     FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
     FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
 
+    # Update state of button_confirm 
+    FrameButton.button_confirm.configure(state="disabled")
+    FrameButton.button_delete.configure(state="disabled")
+
 # funcao deletar
 def deletar():
 
-    global table
+    global table_view_list, table
 
-    try:
-        table_view_data = table.focus()
-        table_view_dic = table.item(table_view_data)
-        table_view_list = table_view_dic['values']
+    id = table_view_list[0]
+    deletar_form([id])
+    messagebox.showinfo('Sucesso', 'Os dados foram deletados com sucesso')
 
-        id = table_view_list[0]
+    # Delete entries of FrameForm, table and image.
+    FrameForm.e_nome.delete(0, 'end')
+    FrameForm.e_local.delete(0, 'end')
+    FrameForm.e_descricao.delete(0, 'end')
+    FrameForm.e_model.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="normal")
+    FrameForm.e_data_compra.delete(0, 'end')
+    FrameForm.e_data_compra.configure(state="disabled")   
+    FrameForm.e_valor.delete(0, 'end')
+    FrameForm.e_serial.delete(0, 'end')
+    FrameImage.l_image.configure(image=None)
 
-        deletar_form([id])
+    for item in table.get_children():
+        table.delete(item)
 
-        messagebox.showinfo('Sucesso', 'Os dados foram deletados com sucesso')
+    lista_itens = ver_form()
+    for item in lista_itens:
+        table.insert('', 'end', values=item)
 
-        for item in table.get_children():
-            table.delete(item)
+    quantidade = []
+    for item in lista_itens:
+        quantidade.append(item[6])
 
-        lista_itens = ver_form()
-        for item in lista_itens:
-            table.insert('', 'end', values=item)
+    FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
+    FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
 
-        quantidade = []
+    # Update state of buttons 
+    FrameButton.button_delete.configure(state="disabled")
+    FrameButton.button_confirm.configure(state="disabled")
 
-        for item in lista_itens:
-            quantidade.append(item[6])
-
-        FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
-        FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
-
-    except IndexError:
-        messagebox.showerror('Erro', 'Seleciona um dos dados na tabela')
-
-# Função para abrir imagem
+'''# Função para abrir imagem
 def visualizar_imagem():
 
     table_view_data = table.focus()
     table_view_dic = table.item(table_view_data)
     table_view_list = table_view_dic['values']
 
-    id = [int(table_view_list[0])]
-    item = ver_item(id)
-    image_path = item[0][8]
+    image_path=table_view_list[8]
     image = ctk.CTkImage(Image.open(image_path), size=(275,275))
-    FrameImage.l_image.configure(image=image)
+    FrameImage.l_image.configure(image=image)'''
 
 
 # ==================== Frames =========================
@@ -209,18 +236,25 @@ class FrameTitleBar(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        # Open image:
-        app_img = ctk.CTkImage(Image.open(PATH + "/images/cadastre-se.png"), size=(45, 45))
-
+        self.columnconfigure(2, weight=1)
+        
         # Font object:
-        font_title = ctk.CTkFont(family="Verdana", size=20, weight="bold")
+        font_title = ctk.CTkFont(family="Verdana", size=24, weight="bold")
+        font_option_btn = ctk.CTkFont(size=13, weight="bold")  
+
+        # Open image:
+        app_img = ctk.CTkImage(Image.open(PATH + "/images/cadastre-se.png"), size=(50,50))
+        option_img = ctk.CTkImage(Image.open(PATH + "/images/settings.png"), size=(25,25))
 
         # Add widgets onto the FrameTitleBar
         label_img = ctk.CTkLabel(self, text="", image=app_img)
-        label_img.grid(row=0, column=0, padx=5, pady=5, stick="ne")
+        label_img.grid(row=0, column=0, padx=(10,5), pady=5, stick="ne")
 
         label_title = ctk.CTkLabel(self, text="Inventário Doméstico", font=font_title)
-        label_title.grid(row=0, column=1, padx=0, pady=0, stick="e")
+        label_title.grid(row=0, column=1, padx=(5,0), pady=0, stick="nse")
+
+        button_option = ctk.CTkButton(self, text="Opções", image=option_img, font=font_option_btn, state="disabled")
+        button_option.grid(row=0, column=2, padx=10, pady=10, stick="nse")
 
 
 class FrameForm(ctk.CTkFrame):
@@ -231,50 +265,50 @@ class FrameForm(ctk.CTkFrame):
         self.columnconfigure((0, 1), weight=1)
 
         # Font object:
-        font_form = ctk.CTkFont(size=13, weight="normal")
+        font_form = ctk.CTkFont(size=14, weight="bold")        
 
         # Add widgets onto the FrameForm
-        l_nome = ctk.CTkLabel(self, text="Nome:",font=font_form)
-        l_nome.grid(row=0, column=0, pady=(10,5), stick="new")
+        l_nome = ctk.CTkLabel(self, text="Nome:",font=font_form, anchor=ctk.W)
+        l_nome.grid(row=0, column=0, padx=10, pady=(10,5), stick="w")
         FrameForm.e_nome = ctk.CTkEntry(self, width=225)
-        FrameForm.e_nome.grid(row=0, column=1, padx=10, pady=(10,5), stick="new")
+        FrameForm.e_nome.grid(row=0, column=1, padx=10, pady=(10,5), stick="ne")
 
-        l_local = ctk.CTkLabel(self, text="Área:", font=font_form)
-        l_local.grid(row=1, column=0)
+        l_local = ctk.CTkLabel(self, text="Área:", font=font_form, anchor=ctk.W)
+        l_local.grid(row=1, column=0, padx=10, stick="w")
         FrameForm.e_local = ctk.CTkEntry(self, width=225)
-        FrameForm.e_local.grid(row=1, column=1, padx=10, pady=5, stick="new")
+        FrameForm.e_local.grid(row=1, column=1, padx=10, pady=5, stick="ne")
 
-        l_descricao = ctk.CTkLabel(self, text="Descrição:",font=font_form)
-        l_descricao.grid(row=2, column=0)
+        l_descricao = ctk.CTkLabel(self, text="Descrição:",font=font_form, anchor=ctk.W)
+        l_descricao.grid(row=2, column=0, padx=10, stick="w")
         FrameForm.e_descricao = ctk.CTkEntry(self, width=225)
-        FrameForm.e_descricao.grid(row=2, column=1, padx=10, pady=5, stick="new")
+        FrameForm.e_descricao.grid(row=2, column=1, padx=10, pady=5, stick="ne")
 
-        l_model = ctk.CTkLabel(self, text="Marca ou modelo:", font=font_form)
-        l_model.grid(row=3, column=0)
+        l_model = ctk.CTkLabel(self, text="Marca ou modelo:", font=font_form, anchor=ctk.W)
+        l_model.grid(row=3, column=0, padx=10, stick="w")
         FrameForm.e_model = ctk.CTkEntry(self, width=225)
-        FrameForm.e_model.grid(row=3, column=1, padx=10, pady=5, stick="new") 
+        FrameForm.e_model.grid(row=3, column=1, padx=10, pady=5, stick="ne") 
 
-        l_valor = ctk.CTkLabel(self, text="Valor da compra:", font=font_form)
-        l_valor.grid(row=4, column=0)
+        l_valor = ctk.CTkLabel(self, text="Valor da compra:", font=font_form, anchor=ctk.W)
+        l_valor.grid(row=4, column=0, padx=10, stick="w")
         FrameForm.e_valor = ctk.CTkEntry(self, width=225)
         FrameForm.e_valor.grid(row=4, column=1, padx=10, pady=5, stick="ne")
 
-        l_serial = ctk.CTkLabel(self, text="Número de série:", font=font_form)
-        l_serial.grid(row=5, column=0)
+        l_serial = ctk.CTkLabel(self, text="Número de série:", font=font_form, anchor=ctk.W)
+        l_serial.grid(row=5, column=0, padx=10, stick="w")
         FrameForm.e_serial = ctk.CTkEntry(self, width=225)
-        FrameForm.e_serial.grid(row=5, column=1, padx=10, pady=5, stick="sew")
+        FrameForm.e_serial.grid(row=5, column=1, padx=10, pady=5, stick="se")
 
-        l_cal = ctk.CTkLabel(self, text="Data da compra:", font=font_form)
-        l_cal.grid(row=6, column=0)
+        l_cal = ctk.CTkLabel(self, text="Data da compra:", font=font_form, anchor=ctk.W)
+        l_cal.grid(row=6, column=0, padx=(10,0), stick="we")
         FrameForm.e_data_compra = ctk.CTkEntry(self, width=85)
         FrameForm.e_data_compra.grid(row=6, column=1, padx=10, stick="w")        
-        button_date = ctk.CTkButton(self, width=120, text="Selecionar Data", command=lambda: self.create_toplevel_date("compra"))
+        button_date = ctk.CTkButton(self, width=120, text="Selecionar Data", font=font_form, command=lambda: self.create_toplevel_date("compra"))
         button_date.grid(row=6, column=1, padx=10, pady=5, stick="e")
 
-        l_view = ctk.CTkLabel(self, text="Imagem do item:", font=font_form, width=120)
-        l_view.grid(row=7, column=0)
-        button_view = ctk.CTkButton(self, width=224, text="Carregar Imagem", command=selecionar_imagem)
-        button_view.grid(row=7, column=1, padx=10, pady=(5,10), stick="sew")
+        l_view = ctk.CTkLabel(self, text="Imagem do item:", font=font_form, width=120, anchor=ctk.W)
+        l_view.grid(row=7, column=0, padx=10, stick="w")
+        button_view = ctk.CTkButton(self, width=224, text="Selecionar Imagem", font=font_form, command=selecionar_imagem)
+        button_view.grid(row=7, column=1, padx=10, pady=(5,10), stick="se")
 
     # =========== Window of date pick  ==============
     def create_toplevel_date(self, campo_data):
@@ -320,31 +354,34 @@ class FrameButton(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        # Open image:
-        add_img = ctk.CTkImage(Image.open(PATH + "/images/add.png"), size=(30,30))
-        update_img = ctk.CTkImage(Image.open(PATH + "/images/refresh.png"), size=(30,30))
-        clear_img = ctk.CTkImage(Image.open(PATH + "/images/folder.png"), size=(30,30))
-        view_img = ctk.CTkImage(Image.open(PATH + "/images/management.png"), size=(30,30))
+        # Open image
+        add_img = ctk.CTkImage(Image.open(PATH + "/images/portfolio.png"), size=(40,40))
+        update_img = ctk.CTkImage(Image.open(PATH + "/images/refresh.png"), size=(40,40))
+        confirm_img = ctk.CTkImage(Image.open(PATH + "/images/configuration.png"), size=(40,40))
+        clear_img = ctk.CTkImage(Image.open(PATH + "/images/trash.png"), size=(40,40))
+        #view_img = ctk.CTkImage(Image.open(PATH + "/images/management.png"), size=(40,40))
        
-        # Create 6x1 grid system
-        self.rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
-        self.columnconfigure(0, weight=1)
-        
+        # Create 6x1 grid system -- row configuration
+        self.rowconfigure((0, 1, 2, 3, 4), weight=1)
+                
+        # Font object
+        font_button = ctk.CTkFont(size=13, weight="bold")
+
         # Add widgets onto the FrameButton
-        button_add = ctk.CTkButton(self, width=175, text="Adicionar", image=add_img, compound="left", command=inserir)        
+        button_add = ctk.CTkButton(self, width=175, text="Adicionar", image=add_img, compound="left", font=font_button, command=inserir)        
         button_add.grid(row=0, column=0, padx=5, pady=5)
         
-        button_update = ctk.CTkButton(self, width=175, text="Atualizar", image=update_img, compound="left", command=atualizar)
+        button_update = ctk.CTkButton(self, width=175, text="Atualizar", image=update_img, compound="left", font=font_button, command=atualizar)
         button_update.grid(row=1, column=0, padx=5, pady=5)
-
-        button_delete = ctk.CTkButton(self, width=175, text="Delete",image=clear_img, compound="left", command=deletar) 
-        button_delete.grid(row=2, column=0, padx=5, pady=5)
         
-        FrameButton.button_confirm = ctk.CTkButton(self, width=175, text="Confirmar", state="disabled", command=update)
-        FrameButton.button_confirm.grid(row=5, column=0, padx=5, pady=5, stick="s")
+        FrameButton.button_confirm = ctk.CTkButton(self, width=175, text="Confirmar", image=confirm_img, state="disabled", font=font_button, command=update)
+        FrameButton.button_confirm.grid(row=2, column=0, padx=5, pady=5)
 
-        button_view = ctk.CTkButton(self, width=175, text="Ver Item", image=view_img, compound="left", command=visualizar_imagem)
-        button_view.grid(row=6, column=0, padx=5, pady=5, stick="s")
+        FrameButton.button_delete = ctk.CTkButton(self, width=175, text="Delete",image=clear_img, compound="left", state="disabled", font=font_button, command=deletar) 
+        FrameButton.button_delete.grid(row=3, column=0, padx=5, pady=5)
+
+        #button_view = ctk.CTkButton(self, width=175, text="Ver Item", image=view_img, compound="left", font=font_button, command=visualizar_imagem)
+        #button_view.grid(row=4, column=0, padx=5, pady=5)
 
 
 class FrameText(ctk.CTkFrame):
@@ -374,15 +411,34 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
         super().__init__(master, **kwargs)
 
         global table
+
+        self.columnconfigure((0, 2), weight=1)
+        self.columnconfigure(1, weight=30)
+        
+        # Font object
+        font_label = ctk.CTkFont(size=14, weight="bold")
+
+        # Open image
+        search_img = ctk.CTkImage(Image.open(PATH + "/images/magnifying-glass.png"), size=(25,25))
+        
+        # Add widgets onto the FrameText
+        l_value_search = ctk.CTkLabel(self, text="Pesquisar", image=search_img, compound="left", padx=8, font=font_label)
+        l_value_search.grid(row=0, column=0, padx=(10,0)  , stick="w")
+
+        e_value_search = ctk.CTkEntry(self, state="disabled")
+        e_value_search.grid(row=0, column=1, padx=0, pady=5, stick="we")
+
+        button_search = ctk.CTkButton(self, text="Pesquisar", state="disabled", font=font_label)
+        button_search.grid(row=0, column=2, padx=10, stick="e")
        
         # List definitions for table
         table_head = ['#ID', 'Nome', 'Sala / Área', 'Descrição', 'Marca / Modelo', 'Data da Compra', 'Valor da Compra', 'Número de Série']
-        width_col = [35, 120, 120, 210, 170, 115, 115, 140]         
+        width_col = [40, 125, 125, 210, 165, 118, 118, 140]         
         i = 0 # Index for
         
         # Add Treeview widget onto the frame
         table = ttk.Treeview(self, columns=table_head, selectmode="browse", show="headings")
-        table.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+        table.grid(row=1, column=0, padx=10, pady=(5,10), columnspan=3, sticky='nsew')
         
         # Table headings and width column connfiguration
         for col in table_head:
@@ -416,6 +472,8 @@ class FrameImage(ctk.CTkFrame):
         FrameImage.l_image = ctk.CTkLabel(self, text="")
         FrameImage.l_image.grid(row = 1, column = 0, padx = 15, pady = (0,15), stick = "nsew")
 
+        #todo
+        # quando selecionar um item da treeview mostra a foto
 
 class App(ctk.CTk): 
     def __init__(self):

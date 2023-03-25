@@ -1,0 +1,3 @@
+- Depois de Adicionar limpar a foto e a data
+- Clicar em um item para atualizar , trocar a imagem
+- Criar função para deletar o formulário, preencher, selecionar_imagem e selecionar item do BD.

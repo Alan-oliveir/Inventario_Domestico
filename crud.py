@@ -11,20 +11,6 @@ def inserir_form(i):
         query = "INSERT INTO Inventario (nome, local, descricao, marca, data_compra, valor_compra, serie, imagem) VALUES (?,?,?,?,?,?,?,?)"
         cur.execute(query, i)
 
-# Deletar inventorio
-def deletar_form(i):
-    with con:
-        cur = con.cursor()
-        query = "DELETE FROM Inventario WHERE id=?"
-        cur.execute(query, i)
-
-# Atualizar inventorio
-def atualizar_form(i):
-    with con:
-        cur = con.cursor()
-        query = "UPDATE Inventario SET nome=?, local=?, descricao=?, marca=?, data_compra=?, valor_compra=?, serie=?, imagem=? WHERE id=?"
-        cur.execute(query, i)
-
 # Ver Inventario
 def ver_form():
     lista_itens = []
@@ -36,8 +22,25 @@ def ver_form():
             lista_itens.append(row)
     return lista_itens
 
+
+# Atualizar inventorio
+def atualizar_form(i):
+    with con:
+        cur = con.cursor()
+        query = "UPDATE Inventario SET nome=?, local=?, descricao=?, marca=?, data_compra=?, valor_compra=?, serie=?, imagem=? WHERE id=?"
+        cur.execute(query, i)
+
+
+# Deletar inventorio
+def deletar_form(i):
+    with con:
+        cur = con.cursor()
+        query = "DELETE FROM Inventario WHERE id=?"
+        cur.execute(query, i)
+
+
 # Ver Item no inventorio
-def ver_item(id):
+'''def ver_item(id):
     lista_itens = []
     with con:
         cur = con.cursor()
@@ -45,4 +48,4 @@ def ver_item(id):
         rows = cur.fetchall()
         for row in rows:
             lista_itens.append(row)
-    return lista_itens
+    return lista_itens'''
