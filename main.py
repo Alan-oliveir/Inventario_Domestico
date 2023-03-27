@@ -53,6 +53,29 @@ def delete_entries():
     FrameForm.e_serial.delete(0, 'end')
     FrameImage.l_image.configure(image=None)
 
+def display_info():
+        
+    n = 0 # Index for 
+
+    # Create striped row tags
+    table.tag_configure('oddrow', background="white")
+    table.tag_configure('evenrow', background="light gray")
+    
+    lista_itens = ver_form()
+    for item in lista_itens:
+        if (n % 2 == 0):
+            table.insert('', 'end', values=item, tags='evenrow')
+        else:
+            table.insert('', 'end', values=item, tags='oddrow')
+        n += 1
+
+    quantidade = []
+    for item in lista_itens:
+        quantidade.append(item[6])
+
+    FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
+    FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
+
 def inserir():
          
     global table, image_path
@@ -91,16 +114,7 @@ def inserir():
         table.delete(item)
 
     # Update info of the table, qtd labels and image
-    lista_itens = ver_form()
-    for item in lista_itens:
-        table.insert('', 'end', values=item)
-
-    quantidade = []
-    for item in lista_itens:
-        quantidade.append(item[6])
-
-    FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
-    FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
+    display_info()
 
 def visualizar():
     
@@ -166,16 +180,7 @@ def atualizar():
         table.delete(item)
 
     # Update info of the table, qtd labels and image
-    lista_itens = ver_form()
-    for item in lista_itens:
-        table.insert('', 'end', values=item)
-
-    quantidade = []
-    for item in lista_itens:
-        quantidade.append(item[6])
-
-    FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
-    FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
+    display_info()
 
     # Update state of button_update 
     FrameButton.button_update.configure(state="disabled")
@@ -196,17 +201,8 @@ def deletar():
         table.delete(item)
 
     # Update info of the table, qtd labels and image
-    lista_itens = ver_form()
-    for item in lista_itens:
-        table.insert('', 'end', values=item)
-
-    quantidade = []
-    for item in lista_itens:
-        quantidade.append(item[6])
-
-    FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
-    FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
-
+    display_info()
+    
     # Update state of buttons 
     FrameButton.button_delete.configure(state="disabled")
     FrameButton.button_update.configure(state="disabled")
@@ -218,16 +214,16 @@ class FrameTitleBar(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
      
-        # Create 1x3 grid system -- column configure
-        self.columnconfigure(2, weight=1)
+        # Create 1x3 grid system -- column configure --> with options button
+        #self.columnconfigure(2, weight=1)
         
         # Font object
         font_title = ctk.CTkFont(family="Verdana", size=24, weight="bold")
-        font_option_btn = ctk.CTkFont(size=13, weight="bold")  
+        #font_option_btn = ctk.CTkFont(size=13, weight="bold") --> with options button  
 
         # Open image
         app_img = ctk.CTkImage(Image.open(PATH + "/images/cadastre-se.png"), size=(50,50))
-        option_img = ctk.CTkImage(Image.open(PATH + "/images/settings.png"), size=(25,25))
+        #option_img = ctk.CTkImage(Image.open(PATH + "/images/settings.png"), size=(25,25)) --> with options button
 
         # Add widgets onto the FrameTitleBar
         label_img = ctk.CTkLabel(self, text="", image=app_img)
@@ -236,8 +232,10 @@ class FrameTitleBar(ctk.CTkFrame):
         label_title = ctk.CTkLabel(self, text="Inventário Doméstico", font=font_title)
         label_title.grid(row=0, column=1, padx=(5,0), pady=0, stick="nse")
 
-        button_option = ctk.CTkButton(self, text="Opções", image=option_img, font=font_option_btn, state="disabled")
-        button_option.grid(row=0, column=2, padx=10, pady=10, stick="nse")
+        # todo
+        # Implement options
+        #button_option = ctk.CTkButton(self, text="Opções", image=option_img, font=font_option_btn, state="disabled")
+        #button_option.grid(row=0, column=2, padx=10, pady=10, stick="nse")
 
 
 class FrameForm(ctk.CTkFrame):
@@ -427,6 +425,12 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
         width_col = [40, 125, 125, 210, 165, 118, 118, 140]         
         i = 0 # Index for
         
+        # Add some style
+        style = ttk.Style()
+
+        # Pick a theme
+        style.theme_use("vista")
+
         # Add Treeview widget onto the frame
         table = ttk.Treeview(self, columns=table_head, selectmode="browse", show="headings")
         table.grid(row=1, column=0, padx=10, pady=(5,10), columnspan=3, sticky='nsew')
@@ -438,16 +442,7 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
             i += 1
 
         # Update info of the table, qtd labels and image
-        lista_itens = ver_form()
-        for item in lista_itens:
-            table.insert('', 'end', values=item)
-
-        quantidade = []
-        for item in lista_itens:
-            quantidade.append(item[6])
-
-        FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
-        FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
+        display_info()
 
 
 class FrameImage(ctk.CTkFrame):
