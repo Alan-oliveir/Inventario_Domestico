@@ -14,16 +14,29 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 
 # ==================== Functions ======================
 
+def search():
+
+    name = FrameTableInfo.e_value_search.get()
+    selections = []
+    for child in table.get_children():
+        if name in table.item(child)["values"]:
+            selections.append(child)
+    
+    if selections == []:
+        messagebox.showinfo('Não encontrado', f'Não foi encontrado itens com o nome {name}.') 
+        table.selection_set(selections)    
+    else:
+        messagebox.showinfo('Sucesso', f'Busca do item: {name} concluída com sucesso.')
+        table.selection_set(selections)
+
 def selecionar_imagem():
 
-    global image_path    
-    
+    global image_path       
     image_path = fd.askopenfilename(filetypes=[('JPEG Files', '.jpg .jpeg'), ('PNG Files', '.png')])
 
     try:
         image = ctk.CTkImage(Image.open(image_path), size=(275,275))
-        FrameImage.l_image.configure(image=image)    
-    
+        FrameImage.l_image.configure(image=image)        
     except:
         messagebox.showerror('Erro', 'Não foi possível identificar a imagem. Por favor, confira o tipo de arquivo e selecione novamente.') 
 
@@ -89,7 +102,7 @@ def inserir():
     FrameText.textbox_value.configure(text="R$ {:,.2f}".format(sum(quantidade)))
     FrameText.textbox_qte_itens.configure(text=f"{len(quantidade)}")
 
-def atualizar():
+def visualizar():
     
     global table_view_list
 
@@ -122,7 +135,7 @@ def atualizar():
     except IndexError:
         messagebox.showerror('Erro', 'Selecione um dos dados na tabela')
 
-def update():
+def atualizar():
 
     global table_view_list, table
     
@@ -350,10 +363,10 @@ class FrameButton(ctk.CTkFrame):
         FrameButton.button_add = ctk.CTkButton(self, width=175, text="Adicionar", image=add_img, compound="left", font=font_button, command=inserir)        
         FrameButton.button_add.grid(row=0, column=0, padx=5, pady=5)
         
-        FrameButton.button_view = ctk.CTkButton(self, width=175, text="Visualizar", image=update_img, compound="left", font=font_button, command=atualizar)
+        FrameButton.button_view = ctk.CTkButton(self, width=175, text="Visualizar", image=update_img, compound="left", font=font_button, command=visualizar)
         FrameButton.button_view.grid(row=1, column=0, padx=5, pady=5)
         
-        FrameButton.button_update = ctk.CTkButton(self, width=175, text="Atualizar", image=confirm_img, state="disabled", font=font_button, command=update)
+        FrameButton.button_update = ctk.CTkButton(self, width=175, text="Atualizar", image=confirm_img, state="disabled", font=font_button, command=atualizar)
         FrameButton.button_update.grid(row=2, column=0, padx=5, pady=5)
 
         FrameButton.button_delete = ctk.CTkButton(self, width=175, text="Excluir",image=clear_img, compound="left", state="disabled", font=font_button, command=deletar) 
@@ -381,6 +394,7 @@ class FrameText(ctk.CTkFrame):
         
         FrameText.textbox_qte_itens = ctk.CTkLabel(self, width=150, height=80, text="", fg_color=("#3B8ED0"), corner_radius=6, font=font_textbox_large)
         FrameText.textbox_qte_itens.grid(row=5, column=0, padx=10, pady=(10, 10))
+        
 
 class FrameTableInfo(ctk.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
@@ -402,10 +416,10 @@ class FrameTableInfo(ctk.CTkScrollableFrame):
         l_value_search = ctk.CTkLabel(self, text="Pesquisar", image=search_img, compound="left", padx=8, font=font_label)
         l_value_search.grid(row=0, column=0, padx=(10,0)  , stick="w")
 
-        e_value_search = ctk.CTkEntry(self, state="disabled")
-        e_value_search.grid(row=0, column=1, padx=0, pady=5, stick="we")
+        FrameTableInfo.e_value_search = ctk.CTkEntry(self, placeholder_text="Digite o nome do item", state="normal")
+        FrameTableInfo.e_value_search.grid(row=0, column=1, padx=0, pady=5, stick="we")
 
-        button_search = ctk.CTkButton(self, text="Pesquisar", state="disabled", font=font_label)
+        button_search = ctk.CTkButton(self, text="Pesquisar", state="normal", font=font_label, command=search)
         button_search.grid(row=0, column=2, padx=10, stick="e")
        
         # List definitions for table
