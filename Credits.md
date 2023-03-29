@@ -5,7 +5,7 @@ Este projeto foi feito com base em: [Usando PY](http://www.usandopy.com/pt/artig
 ### Modificações no projeto original:
 
 - Uso da biblioteca customtkinter: para melhorar o design com widgets mais modernos
-- Implememtação de uma barra de pesquisa: facilita o uso da tabela quando tem muitos itens cadastrados.
+- Implementação de uma barra de pesquisa: facilita o uso da tabela quando tem muitos itens cadastrados.
 - Remoção de botão para ver foto: torna a interface mais intuitiva para o usuário.
 - Aprimoramento do código usando classes para os frames e criação das funções selecionar_imagem e delete_entries em main.py.
 - Comando SQL usado para criar tabela em criarBD.py incluído em crud.py e possibilitando a remoção de criarBD.py
