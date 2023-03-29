@@ -6,7 +6,7 @@
 
 Inventário Doméstico é um programa simples de cadastro de móveis e eletrodomésticos escrito em python que armazena informações sobre e valores de bens pessoais. Com o programa pode registrar o nome do produto, marca, valor, local, data da compra, etc. O sistema permite cadastrar novos itens, visualizar as informações referentes aos produtos já cadastrados, atualizar os dados de cada item e excluir um produto registrado no sistema.
 
-Na interface de usuário foi utilizada a biblioteca customtkinter. CustomTkinter é uma biblioteca python baseada em Tkinter, que fornece widgets novos, modernos e totalmente personalizáveis.
+Na interface de usuário foi utilizada a biblioteca customtkinter. CustomTkinter é uma biblioteca python baseada em Tkinter, que fornece widgets novos, modernos e totalmente personalizáveis: <https://github.com/TomSchimansky/CustomTkinter>
 
 O banco de dados utilizado foi o SQLite. SQLite é uma base de dados relacional de código aberto e que dispensa o uso de um servidor na sua atuação, armazenando seus arquivos dentro de sua própria estrutura.
 
