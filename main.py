@@ -106,6 +106,7 @@ def inserir():
 
         inserir_form(lista_inserir)
         messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
+        image_path = ""
 
     # Delete entries of FrameForm, table and image.
     delete_entries()
@@ -118,7 +119,7 @@ def inserir():
 
 def visualizar():
     
-    global table_view_list
+    global table_view_list, image_path
 
     try:
         table_view_data = table.focus()
@@ -151,7 +152,7 @@ def visualizar():
 
 def atualizar():
 
-    global table_view_list, table
+    global table_view_list, table, image_path
     
     # Update the list with the form entries
     nome = FrameForm.e_nome.get()
@@ -160,18 +161,19 @@ def atualizar():
     model = FrameForm.e_model.get()
     data = FrameForm.e_data_compra.get()
     valor = FrameForm.e_valor.get()
-    serie = FrameForm.e_serial.get()           
-    imagem = table_view_list[8]
+    serie = FrameForm.e_serial.get()        
     id = int(table_view_list[0])
-     
+    imagem = image_path
+
     lista_atualizar = [nome, local, descricao, model, data, valor, serie, imagem, id]    
     for i in lista_atualizar:
         if i=='':
-            messagebox.showerror('Erro', 'Preencha todos os campos')
+            messagebox.showerror('Erro', 'Preencha todos os campos e selecione uma imagem')
             return
 
     atualizar_form(lista_atualizar)
     messagebox.showinfo('Sucesso', 'Os dados foram atualizados com sucesso')
+    image_path = ""
 
     # Delete entries of FrameForm, table and image.
     delete_entries()
@@ -188,11 +190,12 @@ def atualizar():
 
 def deletar():
 
-    global table_view_list, table
+    global table_view_list, table, image_path
 
     id = table_view_list[0]
     deletar_form([id])
     messagebox.showinfo('Sucesso', 'Os dados foram deletados com sucesso')
+    image_path = ""
 
     # Delete entries of FrameForm, table and image
     delete_entries()

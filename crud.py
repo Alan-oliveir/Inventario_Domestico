@@ -1,5 +1,4 @@
 import sqlite3 as lite
-from datetime import datetime
 
 # Criando conexão
 con = lite.connect('dados.db')
