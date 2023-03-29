@@ -1,6 +1,6 @@
 # Projeto Inventário Doméstico
 
-Este projeto foi feito com base em: [Usando PY](http://www.usandopy.com/pt/artigo/sistema-de-cadastro-em-python-como-fazer-um-inventario-domestico-em-python/)
+Este projeto foi feito com base em: <http://www.usandopy.com/pt/artigo/sistema-de-cadastro-em-python-como-fazer-um-inventario-domestico-em-python>
 
 ### Modificações no projeto original:
 
