@@ -1,4 +1,4 @@
- # Inventário Doméstico
+# Inventário Doméstico
  
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/Alan-oliveir/Inventario_Domestico/blob/main/LICENSE)
 
@@ -50,4 +50,4 @@ O programa foi desenvolvido para ser usado no Windows. Baixe o arquivo DomInvent
 
 Alan de Oliveira Gonçalves
 
-[Linkedin](www.linkedin.com/in/alan-de-oliveira-gonçalves-207549258)
+- Linkedin: www.linkedin.com/in/alan-de-oliveira-gonçalves-207549258
