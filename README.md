@@ -43,9 +43,6 @@ O programa foi desenvolvido para ser usado no Windows. Baixe o arquivo DomInvent
 ## Banco de dados
 - SQLite
 
-
-
-
 # Autor
 
 Alan de Oliveira Gonçalves
